@@ -147,7 +147,7 @@ function drawUI() {
     rect(width/2 - 150, height/2 - 40, 300, 80, 10);
     fill(255);
     textSize(24);
-    text("伸出 大拇指：進入準備狀態", width/2, height/2 - 20);
+    text("伸出 食指：進入準備狀態", width/2, height/2 - 20);
     textSize(18);
     text("按下 空白鍵 開始", width/2, height/2);
   } 
@@ -186,7 +186,7 @@ function drawUI() {
     text(`戰績: 玩家 ${playerWins} - 電腦 ${computerWins}`, width/2, height/2 + 60);
     textSize(20);
     fill(0, 255, 0);
-    text("伸出 大拇指 繼續 / 小指 結束", width/2, height/2 + 95);
+    text("伸出 食指 繼續 / 小指 結束", width/2, height/2 + 95);
   }
 }
 
@@ -229,7 +229,7 @@ function detectGesture(lm) {
   if (!thumbUp && !indexUp && !middleUp && !ringUp && !pinkyUp) return "Rock";
 
   // 新增控制手勢
-  if (thumbUp && !indexUp && !middleUp && !ringUp && !pinkyUp) return "Continue"; // 只有大拇指
+  if (!thumbUp && indexUp && !middleUp && !ringUp && !pinkyUp) return "Continue"; // 只有食指
   if (!indexUp && !middleUp && !ringUp && pinkyUp) return "Exit"; // 只有小指
 
   return "...";
