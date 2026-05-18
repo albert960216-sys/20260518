@@ -4,7 +4,7 @@ let camera;
 let detections = {};
 let playerGesture = "...";
 let computerGesture = "";
-let gameState = "IDLE"; // IDLE, COUNTDOWN, RESULT
+let gameState = "IDLE"; // IDLE, READY, COUNTDOWN, RESULT
 let timer = 0;
 let countdown = 3;
 let resultText = "";
@@ -94,19 +94,31 @@ function draw() {
   // 3. 繪製遊戲 UI
   drawUI();
 
-  // 4. 手勢控制遊戲流程
+  // 4. 顯示頂部目前手勢
+  drawCurrentGesture();
+
+  // 5. 手勢控制遊戲流程
   handleGestureControl();
+}
+
+function drawCurrentGesture() {
+  fill(255, 255, 0);
+  noStroke();
+  textSize(24);
+  textAlign(CENTER, TOP);
+  text("目前偵測手勢: " + playerGesture, width / 2, 20);
 }
 
 function handleGestureControl() {
   if (playerGesture === "Continue") {
-    if (gameState === "IDLE") {
-      startGame();
-    } else if (gameState === "RESULT") {
-      gameState = "IDLE";
+    if (gameState === "IDLE" || gameState === "RESULT") {
+      gameState = "READY";
     }
   } else if (playerGesture === "Exit") {
     gameState = "IDLE";
+  } else if (gameState === "READY" && choices.includes(playerGesture)) {
+    // 在 READY 狀態下，偵測到有效出拳即開始倒數
+    startGame();
   }
 }
 
@@ -114,10 +126,9 @@ function keyPressed() {
   // 按下空白鍵開始遊戲
   if (key === ' ' && gameState === "IDLE") {
     gameState = "COUNTDOWN";
-    countdown = 3;
-    timer = millis();
+    startGame();
   } else if (key === ' ' && gameState === "RESULT") {
-    gameState = "IDLE";
+    gameState = "READY";
   }
 }
 
@@ -136,10 +147,17 @@ function drawUI() {
     rect(width/2 - 150, height/2 - 40, 300, 80, 10);
     fill(255);
     textSize(24);
-    text("伸出 大拇指：開始遊戲", width/2, height/2 - 20);
+    text("伸出 大拇指：進入準備狀態", width/2, height/2 - 20);
     textSize(18);
     text("按下 空白鍵 開始", width/2, height/2);
   } 
+  else if (gameState === "READY") {
+    fill(0, 0, 0, 150);
+    rect(width/2 - 200, height/2 - 40, 400, 80, 10);
+    fill(255, 255, 0);
+    textSize(24);
+    text("準備好了！請出拳以開始倒數", width/2, height/2);
+  }
   else if (gameState === "COUNTDOWN") {
     let elapsed = millis() - timer;
     if (elapsed < 1000) countdown = 3;
