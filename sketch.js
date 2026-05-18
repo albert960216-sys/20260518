@@ -148,8 +148,7 @@ function drawUI() {
     fill(255);
     textSize(24);
     text("伸出 食指：進入準備狀態", width/2, height/2 - 20);
-    textSize(18);
-    text("按下 空白鍵 開始", width/2, height/2);
+    
   } 
   else if (gameState === "READY") {
     fill(0, 0, 0, 150);
